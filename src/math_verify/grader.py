@@ -156,9 +156,11 @@ def sympy_numeric_eq(
         if is_atomic_or_pct_atomic(a, Float) or is_atomic_or_pct_atomic(b, Float):
             a = safe_sympy_doit(a)
             b = safe_sympy_doit(b)
-            # Now if both are numbers, we can use precision
-            if isinstance(a, (Number)) and isinstance(b, (Number)):
-                return a.round(float_rounding) == b.round(float_rounding)
+
+            try:
+                return a.round(float_rounding) == b.round(float_rounding)  # Handles both Number and evaluable expressions
+            except Exception:
+                pass
         else:
             return safe_sympy_doit(a) == safe_sympy_doit(b)
 
